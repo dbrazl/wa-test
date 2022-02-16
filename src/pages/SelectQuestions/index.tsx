@@ -1,5 +1,6 @@
 import { Formik } from 'formik';
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Input from '../../components/Input';
 import Page from '../../components/Page';
@@ -14,6 +15,7 @@ type FormType = {
 
 const SelectQuestions: React.FC = () => {
   const { state, dispatch } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const initialFormValues: FormType = {
     numberOfQuestions: 0,
@@ -37,6 +39,7 @@ const SelectQuestions: React.FC = () => {
           numberOfQuestions: parseInt(values.numberOfQuestions),
         }
       });
+      navigate('/ready');
     }
   }
   return (
