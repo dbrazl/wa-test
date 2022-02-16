@@ -1,10 +1,13 @@
 import { Formik } from 'formik';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Page from '../../components/Page';
 import { UserContext } from '../../context/userState';
 
-import { FormStyled, Input, Title } from './styles';
+import Page from '../../components/Page';
+import Title from '../../components/Title';
+import Input from '../../components/Input';
+
+import { FormStyled } from './styles';
 
 type FormType = {
   name: string;
@@ -25,6 +28,8 @@ const Name: React.FC = () => {
         name: values.name,
       }
     });
+
+    navigate('select-questions');
   }
 
   return (

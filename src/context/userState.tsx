@@ -3,6 +3,7 @@ import userReducer from './userReducer';
 
 const initialState: any = {
   name: '',
+  numberOfQuestions: 0,
 };
 
 export const UserContext = createContext(initialState);

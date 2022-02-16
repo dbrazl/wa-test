@@ -24,7 +24,7 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
   }
   
-  body, input, button, a, h1 {
+  body, input, button, a, h1, p {
     font: 14px 'Roboto', sans-serif;
     color: #000;
   }
