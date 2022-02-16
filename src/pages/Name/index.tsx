@@ -1,7 +1,8 @@
 import { Formik } from 'formik';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Page from '../../components/Page';
+import { UserContext } from '../../context/userState';
 
 import { FormStyled, Input, Title } from './styles';
 
@@ -11,14 +12,19 @@ type FormType = {
 
 const Name: React.FC = () => {
   const navigate = useNavigate();
+  const { dispatch } = useContext(UserContext);
 
   const initialFormValues: FormType = {
     name: '',
   };  
 
   function onSubmitForm(values: any): void {
-    console.log(values);
-    console.log(navigate);
+    dispatch({
+      type: '@USER/CHANGE_NAME',
+      payload: {
+        name: values.name,
+      }
+    });
   }
 
   return (
