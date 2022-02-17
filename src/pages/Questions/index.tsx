@@ -29,7 +29,6 @@ const Questions: React.FC = () => {
   const { state } = useContext(UserContext);
 
   async function translateTerm(term: string): Promise<string> {
-    console.log(term.concat('\n\n'), term.replace('/&(lt|gt|quot|paring);/g', ''));
     const termTreated: string = term.replace(/&(lt|gt|quot);/g, function (m, p) { 
       return '';
     }).replace(/&#(039);/g, function (m, p) { 
