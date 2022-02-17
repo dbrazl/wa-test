@@ -8,6 +8,7 @@ import {
 import Name from '../pages/Name';
 import Ready from '../pages/Ready';
 import SelectQuestions from '../pages/SelectQuestions';
+import Questions from '../pages/Questions';
 
 const routes: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const routes: React.FC = () => {
         <Route path="/" element={<Name />} />
         <Route path="/select-questions" element={<SelectQuestions />} />
         <Route path="/ready" element={<Ready />} />
+        <Route path="/questions" element={<Questions />} />
       </Routes>
     </Router>
   );

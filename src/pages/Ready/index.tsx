@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTheme } from 'styled-components'
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import Page from '../../components/Page';
@@ -9,6 +10,7 @@ import { ButtonsContainer } from './styles';
 
 const Ready: React.FC = () => {  
   const theme = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Page>
@@ -20,6 +22,7 @@ const Ready: React.FC = () => {
             backgroundColor: theme.colors.blue,
             boxShadow: 'none'
           }}
+          onClick={() => navigate('/questions')}
         >
           Iniciar
         </Button>
@@ -28,6 +31,7 @@ const Ready: React.FC = () => {
           style={{
             color: theme.colors.blue,
           }}
+          onClick={() => navigate('/select-questions')}
         >
           Cancelar
         </Button>

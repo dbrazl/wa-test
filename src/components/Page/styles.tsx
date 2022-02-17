@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+type ContainerType = {
+  justifyContent: string;
+  alignItems: string;
+};
+
+export const Container = styled.div<ContainerType>`
   width: 100%;
 	height: 100%;
 	display: flex;
-	align-items: center;
-	justify-content: center;
+	align-items: ${props => props.alignItems};
+	justify-content: ${props => props.justifyContent};
 	flex-direction: column;
 `;
