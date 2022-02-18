@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Page from '../../components/Page';
 import Title from '../../components/Title';
 
-import { ButtonsContainer } from './styles';
+import { ButtonsContainer, TitleContainer } from './styles';
 
 const Ready: React.FC = () => {  
   const theme = useTheme();
@@ -25,7 +25,9 @@ const Ready: React.FC = () => {
 
   return (
     <Page>
-      <Title>Beleza! Está pronto para começar?</Title>
+      <TitleContainer>
+        <Title>Beleza! Está pronto para começar?</Title>
+      </TitleContainer>
       <ButtonsContainer>
         <Button
           variant="contained"
