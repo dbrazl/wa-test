@@ -2,10 +2,12 @@ import React, { useContext } from 'react';
 import Page from '../../components/Page';
 import Title from '../../components/Title';
 import { UserContext } from '../../context/userState';
+import Lottie from 'react-lottie';
+import animation from '../../assets/animations/confetti.json';
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { Name, TitleContainer, Container, ChartContainer, List, ListItem, TitleListItem, Option, Number, QuestionTitle, ButtonContainer } from './styles';
+import { Name, TitleContainer, Container, ChartContainer, List, ListItem, TitleListItem, Option, Number, QuestionTitle, ButtonContainer, AnimationContainer } from './styles';
 import { useTheme } from 'styled-components';
 import { QuestionContext } from '../../context/questionState';
 import { Button } from '@mui/material';
@@ -51,6 +53,15 @@ const Result: React.FC = () => {
 
   const chartOptions = {
     maintainAspectRatio: false,
+  };
+
+  const animationDefaultOptions = {
+    loop: false,
+    autoplay: true, 
+    animationData: animation,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
   };
 
   function numberOfCorrectAnswers(): number {
@@ -158,6 +169,12 @@ const Result: React.FC = () => {
           )}
         </ButtonContainer>
       </Container>
+
+      {!params.id ? (
+        <AnimationContainer>
+          <Lottie options={animationDefaultOptions}  />
+        </AnimationContainer>
+      ) : (<></>)}
     </Page>
   );
 }

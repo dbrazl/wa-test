@@ -19,6 +19,7 @@ export const Container = styled.div`
   height: 100%;
   padding: 0 20px;
   margin-top: 80px;
+  z-index: 10;
 
   @media(min-width: 1024px) {
     width: 1000px;
@@ -127,4 +128,12 @@ export const ButtonContainer = styled.div`
   margin-top: 50px;
   padding-bottom: 50px;
   justify-content: center;
+`;
+
+export const AnimationContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 `;
