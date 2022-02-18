@@ -41,7 +41,6 @@ export const List = styled.ul`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  padding-bottom: 50px;
 
   li + li {
     margin-top: 30px;
@@ -121,4 +120,11 @@ export const QuestionTitle = styled.h3`
   margin-bottom: 10px;
   font-size: 16px;
   font-weight: bold;
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  margin-top: 50px;
+  padding-bottom: 50px;
+  justify-content: center;
 `;

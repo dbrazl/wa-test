@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTheme } from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +11,17 @@ import { ButtonsContainer } from './styles';
 const Ready: React.FC = () => {  
   const theme = useTheme();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    function onKeyDown(event: any): void {
+      if (event.key === 'Enter') {
+        navigate('/questions');
+      }
+    }
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   return (
     <Page>

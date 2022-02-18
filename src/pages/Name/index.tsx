@@ -1,5 +1,5 @@
 import { Formik } from 'formik';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/userState';
 
@@ -8,6 +8,7 @@ import Title from '../../components/Title';
 import Input from '../../components/Input';
 
 import { FormStyled } from './styles';
+import { getItemFromStorage, setItemOnStorage } from '../../services/storage';
 
 type FormType = {
   name: string;
@@ -16,6 +17,25 @@ type FormType = {
 const Name: React.FC = () => {
   const navigate = useNavigate();
   const { dispatch } = useContext(UserContext);
+
+  useEffect(() => {
+    async function shouldSkipThisStep(): Promise<void> {
+      const name: string = await getItemFromStorage('name');
+
+      if (name) {
+        dispatch({
+          type: '@USER/CHANGE_NAME',
+          payload: {
+            name,
+          }
+        });
+        
+        navigate('select-questions');
+      }
+    }
+
+    shouldSkipThisStep();
+  }, []);
 
   const initialFormValues: FormType = {
     name: '',
@@ -27,6 +47,10 @@ const Name: React.FC = () => {
       payload: {
         name: values.name,
       }
+    });
+
+    setItemOnStorage({
+      name: values.name,
     });
 
     navigate('select-questions');

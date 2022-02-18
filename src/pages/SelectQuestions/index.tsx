@@ -1,11 +1,12 @@
 import { Formik } from 'formik';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Input from '../../components/Input';
 import Page from '../../components/Page';
 import Title from '../../components/Title';
 import { UserContext } from '../../context/userState';
+import { getItemFromStorage } from '../../services/storage';
 
 import { FormStyled, Name } from './styles';
 
@@ -16,6 +17,25 @@ type FormType = {
 const SelectQuestions: React.FC = () => {
   const { state, dispatch } = useContext(UserContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function hasNameStoraged(): Promise<void> {
+      if (!state.name) {
+        const name: string = await getItemFromStorage('name');
+
+        if (name) {
+          dispatch({
+            type: '@USER/CHANGE_NAME',
+            payload: {
+              name,
+            }
+          });
+        }
+      }
+    }
+
+    hasNameStoraged();
+  }, [state]);
 
   const initialFormValues: FormType = {
     numberOfQuestions: 0,

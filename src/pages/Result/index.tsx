@@ -1,13 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Page from '../../components/Page';
 import Title from '../../components/Title';
 import { UserContext } from '../../context/userState';
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { Name, TitleContainer, Container, ChartContainer, List, ListItem, TitleListItem, Option, Number, QuestionTitle } from './styles';
+import { Name, TitleContainer, Container, ChartContainer, List, ListItem, TitleListItem, Option, Number, QuestionTitle, ButtonContainer } from './styles';
 import { useTheme } from 'styled-components';
 import { QuestionContext } from '../../context/questionState';
+import { saveResultOnStorage } from '../../services/storage';
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 type QuestionType = {
   category: string;
@@ -22,6 +25,7 @@ const Result: React.FC = () => {
   const { state } = useContext(UserContext);
   const { state: questionState } = useContext(QuestionContext);
 
+  const navigate = useNavigate();
   const theme = useTheme();
 
   ChartJS.register(ArcElement, Tooltip, Legend);
@@ -48,6 +52,17 @@ const Result: React.FC = () => {
   const chartOptions = {
     maintainAspectRatio: false,
   };
+
+  useEffect(() => {
+    async function saveResult(): Promise<void> {
+      await saveResultOnStorage({
+        questions: questionState.questions,
+        answers: questionState.answers,
+      });
+    }
+
+    saveResult();
+  }, []);
 
   function numberOfCorrectAnswers(): number {
     return questionState.answers.reduce((acc: number, answer: any) => {
@@ -128,6 +143,18 @@ const Result: React.FC = () => {
         <List>
           {questionState?.questions.map(renderListItem)}
         </List>
+        <ButtonContainer>
+          <Button
+            variant="contained"
+            style={{
+              background: theme.colors.blue,
+              boxShadow: 'unset',
+            }}
+            onClick={() => navigate('/select-questions')}
+          >
+            Tentar denovo
+          </Button>
+        </ButtonContainer>
       </Container>
     </Page>
   );
