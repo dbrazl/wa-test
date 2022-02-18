@@ -1,21 +1,26 @@
+import { Button } from '@mui/material';
 import { Formik } from 'formik';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTheme } from 'styled-components';
 import Input from '../../components/Input';
 import Page from '../../components/Page';
 import Title from '../../components/Title';
 import { UserContext } from '../../context/userState';
 import { getItemFromStorage } from '../../services/storage';
 
-import { FormStyled, Name } from './styles';
+import { ButtonContainer, FormStyled, Name } from './styles';
 
 type FormType = {
   numberOfQuestions: number;
 };
 
 const SelectQuestions: React.FC = () => {
+  const [hasResults, setHasResults] = useState<boolean>(false);
   const { state, dispatch } = useContext(UserContext);
+
+  const theme = useTheme();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,6 +67,20 @@ const SelectQuestions: React.FC = () => {
       navigate('/ready');
     }
   }
+
+  useEffect(() => {
+    async function hasResultsOnStorage(): Promise<void> {
+      const results: any = await getItemFromStorage('results');
+
+      if (results?.length > 0) {
+        setHasResults(true);
+      }
+    }
+
+    hasResultsOnStorage();
+  }, []);
+
+
   return (
     <Page>
       <Formik
@@ -82,6 +101,21 @@ const SelectQuestions: React.FC = () => {
           </FormStyled>
         )}
       </Formik>
+      
+      {hasResults ? (
+        <ButtonContainer>
+          <Button
+            variant="contained"
+            style={{
+              background: theme.colors.blue,
+              boxShadow: 'unset',
+            }}
+            onClick={() => navigate('/old/results')}
+          >
+            Ver resultados antigos
+          </Button>
+        </ButtonContainer>
+      ) : <></> }
     </Page>
   )
 }

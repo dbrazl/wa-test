@@ -11,6 +11,7 @@ import { CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from 'styled-components';
 import { QuestionContext } from '../../context/questionState';
+import { saveResultOnStorage } from '../../services/storage';
 
 type QuestionType = {
   category: string;
@@ -34,6 +35,7 @@ const Questions: React.FC = () => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [actualQuestionIndex, setActualQuestionIndex] = useState<number>(0);
   const [questionsAnswerd, setQuestionAnswerd] = useState<QuestionAnswerd[]>([]);
+
   const { state } = useContext(UserContext);
   const { dispatch } = useContext(QuestionContext);
 
@@ -104,30 +106,40 @@ const Questions: React.FC = () => {
     );
   }
 
+  async function saveResult({ questions, answers }: any): Promise<void> {
+    await saveResultOnStorage({
+      questions,
+      answers,
+    });
+  }
+  
+
   function registerAnswer(question: string, answer: string): void {
-    setQuestionAnswerd([
+    const answers: any[] = [
       ...questionsAnswerd, 
       {
         question,
         answer,
       }
-    ]);
+    ];
+
+    setQuestionAnswerd(answers);
 
     dispatch({
       type: '@QUESTION/SAVE_ANSWERS',
       payload: {
-        answers: [
-          ...questionsAnswerd, 
-          {
-            question,
-            answer,
-          }
-        ],
+        answers,
       }
-    })
+    });
 
     if ((actualQuestionIndex + 1) === questions.length) {
       setActualQuestionIndex(actualQuestionIndex + 1);
+
+      saveResult({
+        questions,
+        answers,
+      });
+
       setTimeout(() => {
         navigate('/result');
       }, 1000);

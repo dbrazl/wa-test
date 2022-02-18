@@ -13,3 +13,9 @@ export const Name = styled.p`
   font-weight: inherit;
   color: ${props => props.theme.colors.blue};
 `;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+`;
