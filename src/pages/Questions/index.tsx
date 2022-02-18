@@ -6,7 +6,11 @@ import api from '../../services/api';
 import googleApi from '../../services/googleApi';
 import LinearProgress from '@mui/material/LinearProgress';
 
-import { Container, Number, List, ListItem, Option, TitleListItem, ProgressContainer } from './styles';
+import { Container, Number, List, ListItem, Option, TitleListItem, ProgressContainer, LoadingContainer } from './styles';
+import { CircularProgress } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from 'styled-components';
+import { QuestionContext } from '../../context/questionState';
 
 type QuestionType = {
   category: string;
@@ -23,10 +27,15 @@ type QuestionAnswerd = {
 };
 
 const Questions: React.FC = () => {
+  const navigate = useNavigate();
+  const theme = useTheme();
+  
+  const [loading, setLoading] = useState<boolean>(true);
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [actualQuestionIndex, setActualQuestionIndex] = useState<number>(0);
   const [questionsAnswerd, setQuestionAnswerd] = useState<QuestionAnswerd[]>([]);
   const { state } = useContext(UserContext);
+  const { dispatch } = useContext(QuestionContext);
 
   async function translateTerm(term: string): Promise<string> {
     const termTreated: string = term.replace(/&(lt|gt|quot);/g, function (m, p) { 
@@ -61,6 +70,13 @@ const Questions: React.FC = () => {
           )
         );
         setQuestions(questionsTranslateds);
+        setLoading(false);
+        dispatch({
+          type: '@QUESTION/SAVE_QUESTIONS',
+          payload: {
+            questions: questionsTranslateds,
+          }
+        });
       } catch(error) {
         console.error(error);
       }
@@ -74,8 +90,6 @@ const Questions: React.FC = () => {
       item?.correct_answer && item.correct_answer,
       ...(item?.incorrect_answers || []),
     ];
-
-    let hover = false;
 
     return (
       <ListItem key={index.toString()}>
@@ -99,21 +113,61 @@ const Questions: React.FC = () => {
       }
     ]);
 
-    setActualQuestionIndex(actualQuestionIndex + 1);
+    dispatch({
+      type: '@QUESTION/SAVE_ANSWERS',
+      payload: {
+        answers: [
+          ...questionsAnswerd, 
+          {
+            question,
+            answer,
+          }
+        ],
+      }
+    })
+
+    if ((actualQuestionIndex + 1) === questions.length) {
+      setActualQuestionIndex(actualQuestionIndex + 1);
+      setTimeout(() => {
+        navigate('/result');
+      }, 1000);
+    } else {
+      setActualQuestionIndex(actualQuestionIndex + 1);
+    }
+
   }
 
   const progress: number = (( actualQuestionIndex ) / questions.length) * 100;
 
   return (
     <Page justifyContent='unset' alignItems='unset'>
-      <Container>
-        <ProgressContainer>
-          <LinearProgress variant="determinate" value={progress} />
-        </ProgressContainer>
-        <Title>Pergunta #{actualQuestionIndex + 1}</Title>
-        <List>
-          {renderListItem(questions[actualQuestionIndex], actualQuestionIndex)}
-        </List>
+      <Container loading={loading}>
+        {loading ?
+          <LoadingContainer>
+            <CircularProgress style={{ color: theme.colors.blue }} />
+          </LoadingContainer>
+        :
+          <>
+            <ProgressContainer>
+              <LinearProgress
+                variant="determinate"
+                value={progress}
+                color="inherit"
+              />
+            </ProgressContainer>
+            {
+              (actualQuestionIndex) !== questions.length ?
+                <>
+                  <Title>Pergunta #{actualQuestionIndex + 1}</Title>
+                  <List>
+                    {renderListItem(questions[actualQuestionIndex], actualQuestionIndex)}
+                  </List>
+                </>
+              : 
+                <Title>Show! Questionário finalizado!</Title>
+            }   
+          </>
+        }
       </Container>
     </Page>
   );

@@ -1,15 +1,20 @@
 import styled from "styled-components";
 import { darken } from 'polished';
 
-export const Container = styled.div`
+type ContainerType = {
+  loading: boolean;
+};
+
+export const Container = styled.div<ContainerType>`
   width: 100%;
+  height: 100%;
   padding: 0 20px;
-  margin-top: 80px;
+  margin-top: ${props => props.loading ? '0px' : '80px'};
 
   @media(min-width: 1024px) {
     width: 1000px;
     margin: 0 auto;
-    margin-top: 150px;
+    margin-top: ${props => props.loading ? '0px' : '150px'};
   }
 `;
 
@@ -65,4 +70,13 @@ export const Number = styled.p`
 
 export const ProgressContainer = styled.div`
   margin-bottom: 20px;
+  color: ${props => props.theme.colors.blue};
+`;
+
+export const LoadingContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
